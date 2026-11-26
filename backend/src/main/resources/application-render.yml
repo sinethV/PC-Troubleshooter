@@ -1,0 +1,28 @@
+# Render demo profile.
+# The app is a read-only reference tool, so an in-memory H2 database is enough:
+# every deploy/cold start recreates the schema and reseeds the library.
+# For persistent data, deploy the default (PostgreSQL) profile instead.
+spring:
+  datasource:
+    url: jdbc:h2:mem:techfix;MODE=PostgreSQL;DATABASE_TO_LOWER=TRUE;DB_CLOSE_DELAY=-1
+    driver-class-name: org.h2.Driver
+    username: sa
+    password: ""
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.H2Dialect
+  flyway:
+    enabled: false
+  h2:
+    console:
+      enabled: false
+
+server:
+  port: ${PORT:8080}
+
+logging:
+  level:
+    org.hibernate.SQL: warn
