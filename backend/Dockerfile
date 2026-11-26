@@ -2,12 +2,20 @@
 FROM maven:3.9-eclipse-temurin-21 AS build
 WORKDIR /app
 
-# Cache dependencies separately from source changes
+# Cache dependencies separately from source changes.
+# Render's shared build IPs are sometimes rate-limited (HTTP 429) by Maven Central,
+# so retry transient download failures at both the Maven and transport layers.
 COPY pom.xml .
-RUN mvn -B -q dependency:go-offline || true
+RUN mvn -B -q -Dmaven.wagon.http.retryHandler.count=10 \
+      -Dmaven.wagon.httpconnectionManager.ttlSeconds=120 \
+      -Dmaven.wagon.rto=30000 \
+      -Dhttp.keepAlive=true dependency:go-offline || true
 
 COPY src ./src
-RUN mvn -B -q clean package -DskipTests
+RUN mvn -B -q -Dmaven.wagon.http.retryHandler.count=10 \
+      -Dmaven.wagon.httpconnectionManager.ttlSeconds=120 \
+      -Dmaven.wagon.rto=30000 \
+      -Dhttp.keepAlive=true clean package -DskipTests
 
 # Runtime stage
 FROM eclipse-temurin:21-jre-alpine
