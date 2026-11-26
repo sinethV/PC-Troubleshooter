@@ -114,6 +114,9 @@ The repo ships with `render.yaml`, which creates two free services in Singapore:
 | `pc-troubleshooter-api` | Docker web service (Spring Boot) | `https://pc-troubleshooter-api.onrender.com` |
 | `pc-troubleshooter-web` | Static site (Vite build) | `https://pc-troubleshooter-web.onrender.com` |
 
+> Render may append a suffix if a subdomain is already taken; use the URLs shown
+> in the dashboard after applying.
+
 **Steps**
 
 1. Push this repository to GitHub (`sinethV/PC-Troubleshooter`).
@@ -174,7 +177,7 @@ C:\IT_Solution
 │       └── main/resources/
 │           ├── application.yml       # PostgreSQL profile
 │           ├── application-dev.yml   # H2 in-memory profile
-│           ├── application-render.yml# Render demo profile (H2, PORT)
+│           ├── application-render.yml # Render demo profile (H2, PORT)
 │           └── db/migration/         # Flyway V1 (schema) + V2 (seed)
 │
 ├── frontend/
