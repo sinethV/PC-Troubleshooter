@@ -2,28 +2,18 @@
 # Apply via: Render Dashboard -> New -> Blueprint -> select this repo.
 #
 # The demo runs the "render" Spring profile (in-memory H2, auto-seeded).
-# Swap SPRING_PROFILES_ACTIVE and add a `databases:` block for PostgreSQL.
 
 services:
   - type: web
     name: pc-troubleshooter-api
     runtime: docker
     rootDir: backend
-    dockerfilePath: ./Dockerfile
-    dockerContext: .
     plan: free
     region: singapore
     healthCheckPath: /api/v1/system/health
-    autoDeployTrigger: commit
     envVars:
       - key: SPRING_PROFILES_ACTIVE
         value: render
-      # Public URL of this service, reused by the frontend build.
-      - key: PUBLIC_URL
-        fromService:
-          name: pc-troubleshooter-api
-          type: web
-          envVarKey: RENDER_EXTERNAL_URL
       # allowedOriginPatterns supports the wildcard, so the generated
       # frontend subdomain is accepted without hard-coding it.
       - key: TECHFIX_CORS_ALLOWED_ORIGINS
@@ -35,15 +25,13 @@ services:
     rootDir: frontend
     buildCommand: npm ci && npm run build
     staticPublishPath: ./dist
-    autoDeployTrigger: commit
     envVars:
       - key: NODE_VERSION
         value: 20
+      # Static-site env vars are baked in at build time. If Render assigns a
+      # different API subdomain, update this value and redeploy.
       - key: VITE_API_ORIGIN
-        fromService:
-          name: pc-troubleshooter-api
-          type: web
-          envVarKey: PUBLIC_URL
+        value: https://pc-troubleshooter-api.onrender.com
     routes:
       - type: rewrite
         source: /*
