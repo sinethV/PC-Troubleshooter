@@ -1,0 +1,9 @@
+name = "pc-troubleshooter"
+compatibility_date = "2026-11-26"
+main = "worker.js"
+
+# Serve the built React app as static assets.
+[assets]
+directory = "./dist"
+binding = "ASSETS"
+not_found_handling = "single-page-application"

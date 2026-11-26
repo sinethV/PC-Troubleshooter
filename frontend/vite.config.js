@@ -5,6 +5,8 @@ export default defineConfig({
   plugins: [react()],
   server: {
     port: 5173,
+    // Allow temporary Cloudflare quick-tunnel hostnames.
+    allowedHosts: ['.trycloudflare.com'],
     proxy: {
       '/api/v1': {
         target: 'http://localhost:8080',
