@@ -99,7 +99,7 @@ export default function SettingsPage() {
           <div>
             <dt className="label">API base URL</dt>
             <dd className="mono mt-1 rounded-lg border border-[#26334f] bg-[#0b1322] px-3 py-2 text-xs text-slate-300">
-              {API_BASE.startsWith('http') ? API_BASE : `http://localhost:8080${API_BASE}`}
+              {API_BASE.startsWith('http') ? API_BASE : `${window.location.origin}${API_BASE}`}
             </dd>
           </div>
           <div>
